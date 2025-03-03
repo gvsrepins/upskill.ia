@@ -3,7 +3,7 @@
         <div class="grid auto-rows-min gap-4">
             <div class="relative rounded-xl border p-10 border-neutral-200 dark:border-neutral-700">
                 <div class="container w-fit">
-                    <h1 class="text-6xl mb-4">Plano de ação</h1>
+                    <h1 class="text-6xl mb-4">Plano de Desenvolvimento</h1>
 
                     <p class="mb-4">Gaps identificados:</p>
                     @foreach($plan['identified_gaps'] as $gap)
