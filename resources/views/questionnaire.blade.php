@@ -10,8 +10,8 @@ $answers = [
 <x-layouts.app>
     <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
         <div class="grid auto-rows-min gap-4">
-            <div class="relative rounded-xl border p-10 border-neutral-200 dark:border-neutral-700">
-                <div class="container w-fit">
+            <div class="relative rounded-xl border p-4 md:p-10 border-neutral-200 dark:border-neutral-700">
+                <div class="container w-full md:w-fit">
                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4">
                         <div id="progressBar" class="bg-green-500 h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                     </div>
@@ -28,7 +28,6 @@ $answers = [
                     </div>
                     @endif
 
-
                     <form action="{{ route('store-answers') }}" method="post">
                         @csrf
 
@@ -36,16 +35,16 @@ $answers = [
                         <input type="hidden" name="seniority" value="{{ $seniority }}">
 
                         @foreach($questions as $key => $question)
-                            <div class="question flex flex-col border p-10 rounded-lg shadow-lg bg-white dark:bg-neutral-800 mb-8 hide" data-question="{{ $key }}">
+                            <div class="question flex flex-col border p-4 md:p-10 rounded-lg shadow-lg bg-white dark:bg-neutral-800 mb-8 hide" data-question="{{ $key }}">
                                 <div class="flex flex-col gap-6">
-                                    <p class="text-2xl font-bold text-neutral-900 dark:text-neutral-200">{{ $question }}</p>
+                                    <p class="text-xl md:text-2xl font-bold text-neutral-900 dark:text-neutral-200">{{ $question }}</p>
                                 </div>
                                 <div class="flex flex-col pt-10">
                                     <div class="flex flex-col">
-                                        <div class="grid grid-cols-5">
+                                        <div class="grid grid-cols-1 md:grid-cols-5 gap-2 md:gap-4">
                                             @for ($i = 0; $i < 5; $i++)
                                                 <label class="flex-1">
-                                                    <div class="card flex flex-col items-center text-center border gap-5 m-2 p-4 has-[input:checked]:bg-gray-200 rounded-lg shadow-md hover:bg-gray-200 dark:hover:bg-neutral-700 text-wrap h-full vertical-center">
+                                                    <div class="card flex flex-col items-center text-center border gap-2 md:gap-5 m-2 p-2 md:p-4 has-[input:checked]:bg-gray-200 rounded-lg shadow-md hover:bg-gray-200 dark:hover:bg-neutral-700 text-wrap h-full vertical-center">
                                                         <div>
                                                             <div><strong>{{ $i+1 }}</strong></div>
                                                             <input class="flex" type="radio" name="answers[{{ $question }}]" value="{{ $i }}" {{ old('answer.' . $key) === $i ? 'checked' : '' }}>
@@ -61,7 +60,7 @@ $answers = [
                                 </div>
                             </div>
                         @endforeach
-                        <div class="flex col gap-6 justify-center">
+                        <div class="flex flex-col md:flex-row gap-6 justify-center">
                             <button type="button" id="prevBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Anterior</button>
                             <button type="button" id="nextBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 self-end rounded">Próximo</button>
                             <button type="submit" id="submitBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded self-end hide">Enviar</button>
