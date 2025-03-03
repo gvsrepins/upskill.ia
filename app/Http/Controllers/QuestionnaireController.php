@@ -26,8 +26,7 @@ class QuestionnaireController extends Controller
         $prompt = view('prompts.questionnaire-prompt', compact('role', 'seniority'))->render();
         $systemPrompt = view('prompts.system-prompt')->render();
 
-        Cache::forget('questionnaire');
-        $response = Cache::remember('questionnaire', now()->addHour(8), function ()
+        Cache::remember('questionnaire', now()->addMinute(2), function ()
             use ($prompt, $systemPrompt, $role, $seniority) {
                 $response = $this->openai->chat()->create([
                     'model' => 'gpt-4',
@@ -71,8 +70,7 @@ class QuestionnaireController extends Controller
 
         $systemPrompt = view('prompts.process-questionary-system-prompt')->render();
 
-        Cache::forget('action-plan');
-        $result = Cache::remember('action-plan', now()->addHour(8), function ()
+        Cache::remember('action-plan', now()->addMinute(2), function ()
             use ($prompt, $systemPrompt) {
 
             $response = $this->openai->chat()->create([
