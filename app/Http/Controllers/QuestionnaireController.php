@@ -4,9 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GenerateQuestionnaireRequest;
 use App\Http\Requests\ProcessQuestionnaireRequest;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use OpenAI;
 
 class QuestionnaireController extends Controller
@@ -26,14 +23,18 @@ class QuestionnaireController extends Controller
         $prompt = view('prompts.questionnaire-prompt', compact('role', 'seniority'))->render();
         $systemPrompt = view('prompts.system-prompt')->render();
 
-        session(['questionnaire' => [
-            'questions' => json_decode($this->openai->chat()->create([
+        $response = $this->openai->chat()->create([
             'model' => 'gpt-4',
             'messages' => [
                 ['role' => 'system', 'content' => $systemPrompt],
                 ['role' => 'user', 'content' => $prompt],
             ],
-            ])->toArray()['choices'][0]['message']['content'], true),
+        ]);
+
+        $questions = json_decode($response->toArray()['choices'][0]['message']['content'], true);
+
+        session(['questionnaire' => [
+            'questions' => $questions,
             'role' => $role,
             'seniority' => $seniority,
         ]]);
@@ -68,13 +69,15 @@ class QuestionnaireController extends Controller
         $response = $this->openai->chat()->create([
             'model' => 'gpt-4',
             'messages' => [
-            ['role' => 'system', 'content' => $systemPrompt],
-            ['role' => 'user', 'content' => $prompt],
+                ['role' => 'system', 'content' => $systemPrompt],
+                ['role' => 'user', 'content' => $prompt],
             ],
         ]);
 
+        $plan = json_decode($response->toArray()['choices'][0]['message']['content'], true);
+
         session(['action-plan' => [
-            'plan' => json_decode($response->toArray()['choices'][0]['message']['content'], true),
+            'plan' => $plan,
         ]]);
 
         return redirect()->route('show-plan');
